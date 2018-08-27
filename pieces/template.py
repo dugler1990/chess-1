@@ -25,7 +25,7 @@ class Template:
 
     def click(self):
 
-        self.active = True
+        self.active = not self.active
 
     def move(self, spaces, gridSize, highlightedSquares):
 

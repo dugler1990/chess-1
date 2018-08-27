@@ -9,6 +9,10 @@ def main():
 
     board = chess.Board(gridSize)
 
+    board.draw()
+    pygame.Surface.blit(display, board.image, (0, 0))
+    pygame.display.update()
+
     run = True
     while run:
 
@@ -21,7 +25,5 @@ def main():
         pygame.Surface.blit(display, board.image, (0, 0))
 
         pygame.display.update()
-
-
 
 main()
