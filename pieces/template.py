@@ -27,6 +27,7 @@ class Template:
 
         self.active = not self.active
 
-    def move(self, spaces, gridSize, highlightedSquares):
-
+    def move(self, location):
+        if not self.hasMoved:self.hasMoved = True
+        self.location = location
         pass

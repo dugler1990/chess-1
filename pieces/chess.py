@@ -91,27 +91,41 @@ class Board:
 
     def findMoves(self, piece):
 
+        list = []
+
         if piece.ID == 'P':
 
-            list = []
+            # Find all the possible spaces a pawn can move to given
+            # any position, and any configuration of other pieces.
 
-            #print('clicked pawn')
+            # White is + because it is on the bottom,
+            # and the y value has to decrease to go up.
             W = 1
+
+            # Black is - because it is on the top,
+            # and the y value has to increase to go down.
             B = -1
+
+            # Color is set to the appropriate B/W value
+            # from above according to it's color.
+            #
+            # Multiply it [B/W] with the number of
+            # spaces forward the piece moves.
             COLOR = 0
-
-            if piece.color == WHITE:
-                COLOR = W
-
-            if piece.color == BLACK:
-                COLOR = B
+            # Color is set to the piece's color
+            if piece.color == WHITE: COLOR = W
+            if piece.color == BLACK: COLOR = B
 
             x = [piece.location[0], piece.location[1] - COLOR]
 
             list.append(x)
+
+            # A pawn can go 2 spaces forward on it's first move
             if not piece.hasMoved:
                 list.append([piece.location[0], piece.location[1] - COLOR * 2])
 
+            # Get the coordinates for the front-left and front-right to
+            # check for enemies to attack.
             check_a = [piece.location[0] - 1, piece.location[1] - COLOR]
             check_b = [piece.location[0] + 1, piece.location[1] - COLOR]
 
@@ -122,23 +136,23 @@ class Board:
                 if otherPiece.location == check_b and otherPiece.color == W:
                     list.append(check_b)
 
-            return list
-
-        elif piece.ID == 'K':
+        elif piece.ID == 'K':   # King
             #print('clicked king')
             pass
-        elif piece.ID == 'N':
+        elif piece.ID == 'N':   # Knight
             #print('clicked knight')
-            pass
-        elif piece.ID == 'Q':
+             pass
+        elif piece.ID == 'Q':   # Queen
             #print('clicked queen')
             pass
-        elif piece.ID == 'R':
+        elif piece.ID == 'R':   # Rook
             #print('clicked rook')
             pass
-        elif piece.ID == 'B':
+        elif piece.ID == 'B':   # Bishop
             #print('clicked bishop')
             pass
+
+        return list
 
     def update(self):
 
@@ -188,13 +202,31 @@ class Board:
                     piece = l[0]
 
                     # If the mouse is over the currently active piece
-                    if mouseOver([piece.location[0] * self.gridSize, piece.location[1] * self.gridSize, 64, 64]):
+                    if mouseOver([piece.location[0] * self.gridSize, piece.location[1] * self.gridSize, self.gridSize, self.gridSize]):
 
                         # Run it's click() function to de-activate it
                         piece.click()
 
                         # Clear the moveSquares list
                         self.moveSquares.clear()
+
+                    else:
+
+                        # Check all the selected squares
+                        for space in self.moveSquares:
+                            loc_x = space[0] * self.gridSize
+                            loc_y = space[1] * self.gridSize
+                            width = self.gridSize
+                            height = self.gridSize
+
+                            # If the mouse is over a selected square
+                            if mouseOver([loc_x, loc_y, width, height]):
+                                piece.move([space[0], space[1]])
+                                piece.click()
+                                self.moveSquares.clear()
+
+
+
 
 
         # Update all the pieces
