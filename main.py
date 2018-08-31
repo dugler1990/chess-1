@@ -13,8 +13,7 @@ def main():
     pygame.Surface.blit(display, board.image, (0, 0))
     pygame.display.update()
 
-    run = True
-    while run:
+    while True:
 
         board.update()
 

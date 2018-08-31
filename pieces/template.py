@@ -1,4 +1,5 @@
 import pygame
+import colors
 
 UP = 1
 DOWN = 2
@@ -14,20 +15,16 @@ class Template:
         self.location = location
         self.hasMoved = False
         self.active = False
+        self.captured = False
+        self.moveSquares = []
 
-    def _update(self): pass  # Leave empty for custom update
+    def findSpaces(self, piecesAll): pass
 
-    def update(self):
 
-        if self.color == (255, 255, 255): self.image = self.image_a
-        elif self.color == (0, 0, 0): self.image = self.image_b
-        self._update()
+    def move(self, location, piecesAll):
 
-    def click(self):
+        self.hasMoved = True
 
-        self.active = not self.active
-
-    def move(self, location):
-        if not self.hasMoved:self.hasMoved = True
+        self.moveSquares.clear()
         self.location = location
-        pass
+        self.active = False
