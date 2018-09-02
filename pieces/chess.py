@@ -7,7 +7,7 @@ from pieces import knight
 import colors
 
 import pygame
-
+display = pygame.display.set_mode((1000, 800))
 def mouseOver(rect):
     m = pygame.mouse.get_pos()
     if rect[0] < m[0] < rect[0] + rect[2]:
@@ -93,6 +93,93 @@ class Board:
 
         return [x, y]
 
+    def promote(self, piece):
+
+        rookImg = pygame.image.load('pieces/img/White R.png')
+        knightImg = pygame.image.load('pieces/img/White N.png')
+        bishopImg = pygame.image.load('pieces/img/White B.png')
+        queenImg = pygame.image.load('pieces/img/White Q.png')
+
+        if piece.color == colors.PLAYER_2:
+            rookImg = pygame.image.load('pieces/img/Black R.png')
+            knightImg = pygame.image.load('pieces/img/Black N.png')
+            bishopImg = pygame.image.load('pieces/img/Black B.png')
+            queenImg = pygame.image.load('pieces/img/Black Q.png')
+
+        promoting = True
+
+        while promoting:
+
+            for event in pygame.event.get():
+
+                # Exit when exit button is pushed
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+
+                    if mouseOver([74, 240, 64, 64]):
+                        piece.ID = 'R'
+                        piece.image = rookImg
+                        piece.promote = False
+                        promoting = False
+                    elif mouseOver([170, 240, 64, 64]):
+                        piece.ID = 'N'
+                        piece.image = knightImg
+                        piece.promote = False
+                        promoting = False
+                    elif mouseOver([266, 240, 64, 64]):
+                        piece.ID = 'B'
+                        piece.image = bishopImg
+                        piece.promote = False
+                        promoting = False
+                    elif mouseOver([360, 240, 64, 64]):
+                        piece.ID = 'Q'
+                        piece.image = queenImg
+                        piece.promote = False
+                        promoting = False
+                    else:
+                        pass
+
+            # Grey background of popup
+            pygame.draw.rect(self.image, (100, 100, 100), [48, 192, 416, 128], 0)
+
+            # Black border around popup
+            pygame.draw.rect(self.image, (0, 0, 0), [48, 192, 416, 128], 15)
+
+            # Red background behind pieces
+            pygame.draw.rect(self.image, (128, 0, 0), [74, 240, 64, 64], 0)
+            pygame.draw.rect(self.image, (128, 0, 0), [170, 240, 64, 64], 0)
+            pygame.draw.rect(self.image, (128, 0, 0), [266, 240, 64, 64], 0)
+            pygame.draw.rect(self.image, (128, 0, 0), [360, 240, 64, 64], 0)
+
+            # Piece images
+            pygame.Surface.blit(self.image, rookImg, (74, 240))
+            pygame.Surface.blit(self.image, knightImg, (170, 240))
+            pygame.Surface.blit(self.image, bishopImg, (266, 240))
+            pygame.Surface.blit(self.image, queenImg, (360, 240))
+
+            # White squares around pieces
+            pygame.draw.rect(self.image, (255, 255, 255), [74, 240, 64, 64], 1)
+            pygame.draw.rect(self.image, (255, 255, 255), [170, 240, 64, 64], 1)
+            pygame.draw.rect(self.image, (255, 255, 255), [266, 240, 64, 64], 1)
+            pygame.draw.rect(self.image, (255, 255, 255), [360, 240, 64, 64], 1)
+
+            # Text
+            pygame.font.init()
+            font = pygame.font.SysFont('arial', 16, True, False)
+            label = font.render('Promote Pawn', True, (255, 255, 255))
+            rect = label.get_rect()
+            x = 256 - rect[2] / 2
+            y = 216 - rect[3] / 2
+            pygame.Surface.blit(self.image, label, [x, y])
+
+            pygame.Surface.blit(display, self.image, (0, 0))
+            pygame.display.update()
+
+        return piece
+
     def update(self):
 
         for event in pygame.event.get():
@@ -154,6 +241,25 @@ class Board:
                             # Select and move the piece
                             self.SELECT_FLAG = True
                             piece.findSpaces(self.chessSet.pieces)
+
+        # Check if any pawns are on the opposite side of the board
+        for n in range(len(self.chessSet.pieces)):
+            piece = self.chessSet.pieces[n]
+            if piece.ID == 'P':
+                if piece.color == colors.PLAYER_1 and piece.location[1] == 7:
+                    self.chessSet.pieces[n] = self.promote(piece)
+                if piece.color == colors.PLAYER_2 and piece.location[1] == 0:
+                    self.chessSet.pieces[n] = self.promote(piece)
+
+        # Promote any pawns if needed
+        for n in range(len(self.chessSet.pieces)):
+
+            piece = self.chessSet.pieces[n]
+
+            print(piece.ID)
+            if piece.ID == 'P':
+                if piece.promote:
+                    self.chessSet.pieces[n] = self.promote(piece)
 
     def draw(self):
 
