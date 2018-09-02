@@ -44,8 +44,41 @@ class Rook(template.Template):
         elif self.color == colors.PLAYER_2:
             COLOR = B
 
+        x = self.location[0]
+        y = self.location[1]
 
+        self.moveSquares.clear()
 
+        _list = [
+            [[0, 0], True],
+            [[0, 0], True],
+            [[0, 0], True],
+            [[0, 0], True],
+        ]
 
+        for n in range(1, 8):
 
+            list = [
+                [[x, y - n], _list[0][1]],
+                [[x - n, y], _list[1][1]],
+                [[x + n, y], _list[2][1]],
+                [[x, y + n], _list[3][1]],
+            ]
 
+            print(list)
+
+            for r in range(len(list)):
+
+                space = list[r]
+                ADD = True
+
+                for piece in piecesAll:
+
+                    if piece.location == space[0] and not piece.captured:
+                        _list[r][1] = False
+
+                        if piece.color == self.color:
+                            ADD = False
+
+                if ADD and space[1]:
+                    self.moveSquares.append(space[0])

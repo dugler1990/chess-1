@@ -19,6 +19,7 @@ class Knight(template.Template):
     def findSpaces(self, piecesAll):
 
         self.active = True
+        self.moveSquares.clear()
 
         # Find all the possible spaces a king can move to given
         # any position, and any configuration of other pieces.
@@ -43,6 +44,35 @@ class Knight(template.Template):
             COLOR = W
         elif self.color == colors.PLAYER_2:
             COLOR = B
+
+        x = self.location[0]
+        y = self.location[1]
+
+        list = [
+            [x-1, y-2],
+            [x+1, y-2],
+            [x+2, y-1],
+            [x-2, y-1],
+            [x-2, y+1],
+            [x+2, y+1],
+            [x-1, y+2],
+            [x+1, y+2],
+
+        ]
+
+        for space in list:
+
+            ADD = True
+
+            for piece in piecesAll:
+
+                if piece.location == space and piece.color == self.color and not piece.captured:
+                    ADD = False
+                elif not (0 <= space[0] <= 7) or not (0 <= space[1] <= 7):
+                    ADD = False
+
+            if ADD:
+                self.moveSquares.append(space)
 
 
 

@@ -36,7 +36,8 @@ class King(template.Template):
         # from above according to it's color.
         #
         # Multiply it [B/W] with the number of
-        # spaces forward the piece moves.
+        # spaces forward the piece
+        # moves, or subtract it from Y.
         COLOR = 0
 
         # Color is set to the piece's color
@@ -44,6 +45,36 @@ class King(template.Template):
             COLOR = W
         elif self.color == colors.PLAYER_2:
             COLOR = B
+
+        x = self.location[0]
+        y = self.location[1]
+
+        list = [
+            [x-1, y-1],
+            [x-1, y],
+            [x-1, y+1],
+            [x, y-1],
+            [x, y+1],
+            [x+1, y-1],
+            [x+1, y],
+            [x+1, y+1],
+        ]
+
+        for space in list:
+
+            ADD = True
+
+            for piece in piecesAll:
+
+                if piece.location == space and piece.color == self.color and not piece.captured:
+                    ADD = False
+                elif not (0 <= space[0] <= 7) or not (0 <= space[1] <= 7):
+                    ADD = False
+
+            if ADD:
+
+                self.moveSquares.append(space)
+
 
 
 

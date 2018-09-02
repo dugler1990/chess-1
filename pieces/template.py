@@ -27,4 +27,10 @@ class Template:
 
         self.moveSquares.clear()
         self.location = location
+
+        if self.location[0] < 0: self.location[0] = 0
+        elif self.location[0] > 7: self.location[0] = 7
+        if self.location[1] < 0: self.location[1] = 0
+        elif self.location[1] > 7: self.location[1] = 7
+
         self.active = False

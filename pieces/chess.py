@@ -22,7 +22,6 @@ class ChessSet:
         self.colors = [colors.PLAYER_1, colors.PLAYER_2]
 
         self.pieces = [
-
             # PLAYER_1 pieces
 
             pawn.Pawn([0, 6], self.colors[1]),
@@ -68,7 +67,6 @@ class ChessSet:
 
             queen.Queen([3, 0], self.colors[0]),
             king.King([4, 0], self.colors[0]),
-
         ]
 
 class Board:
@@ -105,7 +103,7 @@ class Board:
                 quit()
 
             # If the user clicks
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 
                 # If there is already a piece selected
                 if self.SELECT_FLAG:
@@ -151,7 +149,7 @@ class Board:
                     for piece in self.chessSet.pieces:
 
                         # If the mouse is over an active piece
-                        if piece.location == self.getMouse():
+                        if piece.location == self.getMouse() and not piece.captured:
 
                             # Select and move the piece
                             self.SELECT_FLAG = True
@@ -159,21 +157,27 @@ class Board:
 
     def draw(self):
 
+        #squareWidth = 4
+        squareWidth = 0
+
         # Reset the board image
         self.image = pygame.image.load('pieces/img/board.png')
-
-        # Draw the pieces
+        # -------------------------
+        # Draw red squares around all the spaces onto the board image
         for piece in self.chessSet.pieces:
+            if piece.active:
 
-            # If the piece hasn't been captured
-            if not piece.captured:
-                # Find it's location and add it to the list
-                loc = [piece.location[0] * self.gridSize, piece.location[1] * self.gridSize]
+                for square in piece.moveSquares:
+                    # Create a rectangle from the coordinates
+                    rect = [square[0] * self.gridSize,
+                            square[1] * self.gridSize,
+                            self.gridSize,
+                            self.gridSize]
 
-                pygame.Surface.blit(self.image, piece.image, loc)
-
+                    # Draw the square
+                    pygame.draw.rect(self.image, (128, 0, 0), rect, squareWidth)
+        # -------------------------
         # Draw a blue square around the selected piece
-
         # Create a rectangle from the coordinates
         for piece in self.chessSet.pieces:
             if piece.active:
@@ -183,19 +187,14 @@ class Board:
                         self.gridSize]
 
                 # Draw the square
-                pygame.draw.rect(self.image, (0, 255, 0), rect, 2)
+                pygame.draw.rect(self.image, (0, 128, 0), rect, squareWidth)
 
-        # Draw red squares around all the spaces onto the board image
+        # -------------------------
+        # Draw the pieces
         for piece in self.chessSet.pieces:
-            if piece.active:
 
-                for square in piece.moveSquares:
-
-                    # Create a rectangle from the coordinates
-                    rect = [square[0] * self.gridSize,
-                            square[1] * self.gridSize,
-                            self.gridSize,
-                            self.gridSize]
-
-                    # Draw the square
-                    pygame.draw.rect(self.image, (255, 0, 0), rect, 2)
+            # If the piece hasn't been captured
+            if not piece.captured:
+                # Find it's location and draw it's image
+                loc = [piece.location[0] * self.gridSize, piece.location[1] * self.gridSize]
+                pygame.Surface.blit(self.image, piece.image, loc)
