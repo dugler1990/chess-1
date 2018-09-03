@@ -54,6 +54,7 @@ class Template:
 
     def pawnSpaces(self, piecesAll):
         self.active = True
+        self.moveSquares.clear()
 
         # Find all the possible spaces a pawn can move to given
         # any position, and any configuration of other pieces.
@@ -96,9 +97,9 @@ class Template:
         if ADD:
             self.moveSquares.append(x)
 
-        # -------------------------
+            # -------------------------
         # A pawn can go 2 spaces forward on it's first move
-        if not self.hasMoved:
+        if not self.hasMoved and self.moveSquares:
             ADD = True
             x = [self.location[0], self.location[1] - COLOR * 2]
 

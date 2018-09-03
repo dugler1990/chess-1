@@ -119,22 +119,22 @@ class Board:
 
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 
-                    if mouseOver([74, 240, 64, 64]):
+                    if mouseOver([318, 384, 64, 64]):
                         piece.ID = 'R'
                         piece.image = rookImg
                         piece.promote = False
                         promoting = False
-                    elif mouseOver([170, 240, 64, 64]):
+                    elif mouseOver([414, 384, 64, 64]):
                         piece.ID = 'N'
                         piece.image = knightImg
                         piece.promote = False
                         promoting = False
-                    elif mouseOver([266, 240, 64, 64]):
+                    elif mouseOver([510, 384, 64, 64]):
                         piece.ID = 'B'
                         piece.image = bishopImg
                         piece.promote = False
                         promoting = False
-                    elif mouseOver([360, 240, 64, 64]):
+                    elif mouseOver([604, 384, 64, 64]):
                         piece.ID = 'Q'
                         piece.image = queenImg
                         piece.promote = False
@@ -175,7 +175,7 @@ class Board:
             y = 216 - rect[3] / 2
             pygame.Surface.blit(self.image, label, [x, y])
 
-            pygame.Surface.blit(display, self.image, (0, 0))
+            pygame.Surface.blit(display, self.image, (244, 144))
             pygame.display.update()
 
         return piece
