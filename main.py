@@ -21,7 +21,8 @@ def main():
 
         board.draw()
 
-        pygame.Surface.blit(display, board.image, (0, 0))
+        pygame.draw.rect(display, (128, 128, 128), [209, 109, 582, 582], 0)
+        pygame.Surface.blit(display, board.image, (244, 144))
 
         pygame.display.update()
 

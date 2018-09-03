@@ -88,8 +88,8 @@ class Board:
 
         m = pygame.mouse.get_pos()
 
-        x = int(m[0] / self.gridSize)
-        y = int(m[1] / self.gridSize)
+        x = int((m[0] - 244) / self.gridSize)
+        y = int((m[1] - 144) / self.gridSize)
 
         return [x, y]
 
@@ -222,8 +222,8 @@ class Board:
                                         if piece.location[0] > 7: piece.location[0] = 7
                                         if piece.location[1] > 7: piece.location[1] = 7
 
-                                        # If there is an enemy in the new space
-                                        # DELETE IT!
+                                        # If there is an enemy in the
+                                        # new space, capture it.
                                         for otherPiece in self.chessSet.pieces:
                                             if space == otherPiece.location:
                                                 if otherPiece.color != piece.color:
@@ -256,7 +256,6 @@ class Board:
 
             piece = self.chessSet.pieces[n]
 
-            print(piece.ID)
             if piece.ID == 'P':
                 if piece.promote:
                     self.chessSet.pieces[n] = self.promote(piece)
